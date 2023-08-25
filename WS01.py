@@ -13,11 +13,11 @@ import json
 import os
 with open('config.json','r') as config_file:
         config_data = json.load(config_file)
-        OPENAI_API_KEY = config_data["OPENAI_API_KEY"]
+        OPENAI_API_KEY = config_data["OPENAI_API_KEY"]  #Setting up the API KEY
 openai.api_key = OPENAI_API_KEY
 user_direcory = os.getcwd()
-file_name = "WS01.txt"
-df_name = "processed_WS01.csv"
+file_name = "WS01.txt"  #Text file to store the Scraped data
+df_name = "processed_WS01.csv" #csv file to store the preprocessed data
 file_path = os.path.join(user_direcory,file_name)
 df_path = os.path.join(user_direcory,df_name)
 def crawl(url):
@@ -88,7 +88,9 @@ def answer_question(df,question,max_len=1800,size="ada",debug=False,max_tokens=1
     except Exception as e:
         print("Exception : ",e)
         return ""
-crawl("https://playvalorant.com/en-us/")
+url = "Provide URL"
+crawl(url)
+# Preprocessing 
 with open(file_path,'r') as f:
     text = f.read()
     data = {'fname':['file'], 'text':[text]}
@@ -116,6 +118,6 @@ df=pd.read_csv(df_path, index_col=0)
 df['embeddings'] = df['embeddings'].apply(literal_eval).apply(np.array)
 while(1):
     question = input("Enter a question : ")
-    if(question == "Exit"):
+    if(question == "Exit"): # Exit condition
         break
     print(answer_question(df,question))
